@@ -1,3 +1,4 @@
+/*
 #app {
     height: 100vh;
     text-align: center;
@@ -57,11 +58,15 @@
     border: none;
     background-color: rgba(255, 255, 255, 1);
 }
+*/
 
+html {
+    text-align: center;
+}
 
 
 .CircularProgressbar-path {
-    stroke: red;
+    /*stroke: red;*/
     transform: rotate(0.75turn);
     transform-origin: center center;
     stroke-linecap: round;
