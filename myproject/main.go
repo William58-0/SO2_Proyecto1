@@ -40,17 +40,30 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"math"
+	"strconv"
+	"time"
 
-	 human "github.com/dustin/go-humanize"
+	// "github.com/getlantern/systray"
+	"github.com/shirou/gopsutil/cpu"
+	
+	// human "github.com/dustin/go-humanize"
 	"github.com/shirou/gopsutil/disk"
 )
 
-func main() {
-	formatter := "%-14s %7s %7s %7s %4s %s\n"
-	fmt.Printf(formatter, "Filesystem", "Size", "Used", "Avail", "Use%", "Mounted on")
 
+func getCpuUsage() int {
+	percent, err := cpu.Percent(time.Second, false)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return int(math.Ceil(percent[0]))
+}
+
+func getDiskUsage() int{
 	parts, _ := disk.Partitions(true)
-	
+	percent := 0
 	for _, p := range parts {
 		device := p.Mountpoint
 		// solo funciona así en linux
@@ -61,16 +74,34 @@ func main() {
 				continue
 			}
 	
-			percent := fmt.Sprintf("%2.f%%", s.UsedPercent)
-	
-			fmt.Printf(formatter,
-				s.Fstype,
-				human.Bytes(s.Total),
-				human.Bytes(s.Used),
-				human.Bytes(s.Free),
-				percent,
-				p.Mountpoint,
-			)
+			percent = int(math.Ceil(s.UsedPercent))
+			break
 		}
 	}
+	return percent
+}
+
+func getData() string {
+	cpuData := "Cpu: " + strconv.Itoa(getCpuUsage()) + "% "
+	diskData := "Disk: " + strconv.Itoa(getDiskUsage()) + "% "
+	// fmt.Println(cpuData + diskData)
+	return cpuData + diskData
+}
+
+func onReady() {
+	var result string
+	for {
+		result = getData()
+		fmt.Println(result)
+		//systray.SetTitle(result)
+	}
+}
+
+func main() {
+	onReady()
+	/*
+	for {
+		fmt.Println("hola")
+	}
+	*/
 }
