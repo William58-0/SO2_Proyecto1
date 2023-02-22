@@ -14,9 +14,9 @@ function App() {
     const [totalDisk, setTotalDisk] = useState(0);
 
     runtime.EventsOn("recursos", (content) => {
-        console.log(content)
+        // console.log(content)
         var json = JSON.parse(content)
-        console.log(json)
+        // console.log(json)
 
         setPercentageCPU(json['CPU']['Porcentaje'])
         setNucleosCPU(json['CPU']['Nucleos'])
@@ -26,12 +26,6 @@ function App() {
         setLibreDisk(json['Disco']['Disponible'])
         setTotalDisk(json['Disco']['Total'])
     })
-
-    function greet() {
-        // Greet(name).then(updateResultText);
-        setPercentageCPU(50)
-        setPercentageDisk(10)
-    }
 
     function colorPorcentaje(valor) {
         if (valor <= 33) {
@@ -45,7 +39,7 @@ function App() {
 
     return (
         <>
-            <h1 style={{ fontSize: 40 }}>Administrador de tareas</h1>
+            <h1 style={{ fontSize: 40, marginTop: '2%' }}>Administrador de tareas</h1>
             <div class='row' style={{ padding: '2%' }}>
                 <div class='col' >
                     <Card>
@@ -115,13 +109,13 @@ function App() {
                                     <tbody>
                                         <tr>
                                             <td >
-                                                {usadoDisk}
+                                                {usadoDisk} GB
                                             </td>
                                             <td >
-                                                {libreDisk}
+                                                {libreDisk} GB
                                             </td>
                                             <td >
-                                                {totalDisk}
+                                                {totalDisk} GB
                                             </td>
                                         </tr>
                                     </tbody>
@@ -131,7 +125,9 @@ function App() {
                     </Card>
                 </div>
             </div>
-            <button className="btn" onClick={greet}>dfafafda</button>
+            <div style={{ textAlign: 'right', padding: '2%' }}>
+                William Alejandro Borrayo Alarcón - 201909103
+            </div>
         </>
     )
 }

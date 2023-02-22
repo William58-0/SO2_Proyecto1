@@ -67,7 +67,7 @@ func getDiskInfo() Disco {
 				continue
 			}
 			
-			porcentaje := int(((s.Total - s.Free)*100/s.Total))
+			porcentaje := int(math.Round((float64(s.Total - s.Free)*100.0/float64(s.Total))))
 			libre := fmt.Sprintf("%.1f", (float64(s.Free) / 1000000000.0))
 			total := fmt.Sprintf("%.1f", (float64(s.Total) / 1000000000.0))
 			usado := fmt.Sprintf("%.1f", (float64(s.Total - s.Free) / 1000000000.0))
