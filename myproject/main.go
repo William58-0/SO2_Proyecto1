@@ -41,7 +41,7 @@ package main
 import (
 	"fmt"
 
-	human "github.com/dustin/go-humanize"
+	 human "github.com/dustin/go-humanize"
 	"github.com/shirou/gopsutil/disk"
 )
 
@@ -50,23 +50,27 @@ func main() {
 	fmt.Printf(formatter, "Filesystem", "Size", "Used", "Avail", "Use%", "Mounted on")
 
 	parts, _ := disk.Partitions(true)
+	
 	for _, p := range parts {
 		device := p.Mountpoint
-		s, _ := disk.Usage(device)
+		// solo funciona así en linux
+		if device == "/" {
+			s, _ := disk.Usage(device)
 
-		if s.Total == 0 {
-			continue
+			if s.Total == 0 {
+				continue
+			}
+	
+			percent := fmt.Sprintf("%2.f%%", s.UsedPercent)
+	
+			fmt.Printf(formatter,
+				s.Fstype,
+				human.Bytes(s.Total),
+				human.Bytes(s.Used),
+				human.Bytes(s.Free),
+				percent,
+				p.Mountpoint,
+			)
 		}
-
-		percent := fmt.Sprintf("%2.f%%", s.UsedPercent)
-
-		fmt.Printf(formatter,
-			s.Fstype,
-			human.Bytes(s.Total),
-			human.Bytes(s.Used),
-			human.Bytes(s.Free),
-			percent,
-			p.Mountpoint,
-		)
 	}
 }
