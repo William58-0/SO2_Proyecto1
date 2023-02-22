@@ -40,68 +40,33 @@ package main
 
 import (
 	"fmt"
-	"github.com/getlantern/systray"
-	"github.com/shirou/gopsutil/cpu"
-	"github.com/shirou/gopsutil/mem"
-	"log"
-	"math"
-	"strconv"
-	"time"
+
+	human "github.com/dustin/go-humanize"
+	"github.com/shirou/gopsutil/disk"
 )
 
-func getCpuUsage() int {
-	percent, err := cpu.Percent(time.Second, false)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return int(math.Ceil(percent[0]))
-}
+func main() {
+	formatter := "%-14s %7s %7s %7s %4s %s\n"
+	fmt.Printf(formatter, "Filesystem", "Size", "Used", "Avail", "Use%", "Mounted on")
 
-func getMemoryUsage() int {
-	memory, err := mem.VirtualMemory()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return int(math.Ceil(memory.UsedPercent))
-}
+	parts, _ := disk.Partitions(true)
+	for _, p := range parts {
+		device := p.Mountpoint
+		s, _ := disk.Usage(device)
 
-func getData() string {
-	cpuData := "Cpu: " + strconv.Itoa(getCpuUsage()) + "% "
-	memoryData := "Mem: " + strconv.Itoa(getMemoryUsage()) + "% "
-	fmt.Println(cpuData + memoryData)
-	return cpuData + memoryData
-}
-
-func onReady() {
-	go func() {
-		var result string
-		for {
-			result = getData()
-			systray.SetTitle(result)
+		if s.Total == 0 {
+			continue
 		}
 
-	}()
-	/*
-		systray.AddSeparator()
-		mQuit := systray.AddMenuItem("Quit", "Quits this app")
-		go func() {
-			for {
-				select {
-				case <-mQuit.ClickedCh:
-					systray.Quit()
-					return
-				}
+		percent := fmt.Sprintf("%2.f%%", s.UsedPercent)
 
-			}
-
-		}()
-	*/
-}
-
-func onExit() {
-
-}
-
-func main() {
-	systray.Run(onReady, onExit)
+		fmt.Printf(formatter,
+			s.Fstype,
+			human.Bytes(s.Total),
+			human.Bytes(s.Used),
+			human.Bytes(s.Free),
+			percent,
+			p.Mountpoint,
+		)
+	}
 }
