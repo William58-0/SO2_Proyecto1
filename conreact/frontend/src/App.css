@@ -57,3 +57,25 @@
     border: none;
     background-color: rgba(255, 255, 255, 1);
 }
+
+
+
+.CircularProgressbar-path {
+    stroke: red;
+    transform: rotate(0.75turn);
+    transform-origin: center center;
+    stroke-linecap: round;
+    transition: 'stroke-dashoffset 0.5s ease 0s';
+  }
+  .CircularProgressbar-trail {
+    stroke: gray;
+    transform: rotate(0.75turn);
+    transform-origin: center center;
+    stroke-linecap: round;
+  }
+  .CircularProgressbar-text {
+    fill: yellow;
+  }
+  .CircularProgressbar-background {
+    fill: green;
+  }
