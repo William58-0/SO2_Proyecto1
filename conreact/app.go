@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"time"
 
+	//"github.com/shirou/gopsutil/cpu"
+	"github.com/wailsapp/wails"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -26,6 +28,7 @@ func (a *App) startup(ctx context.Context) {
 	go func() {
 		for {
 			fmt.Println("ejecutando")
+			PruebaDisco()
 			// ctx.Events.Emit("cpu_usage")
 			//EventsEmit(ctx, "cpu_usage")
 			runtime.EventsEmit(ctx, "cpu_usage","hola")
@@ -35,19 +38,15 @@ func (a *App) startup(ctx context.Context) {
 
 }
 
-
 // Greet returns a greeting for the given name
 func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Greet %s, It's show time!", name)
+	return fmt.Sprintf("Hello %s, It's show time!", name)
 }
 
-func (a *App) Hola() string {
-	return "Holaa, It's show time!"
-}
+func (a *App) WailsInit(runtime *wails.Runtime) error {
+	// s.log = runtime.Log.New("Stats")
 
-// func Percent(interval time.Duration, percpu bool) ([]float64, error)
+	
 
-func (a *App) GetUsoCPU() string {
-
-	return "Holaa, It's show time!"
+	return nil
 }
