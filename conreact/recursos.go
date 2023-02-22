@@ -67,7 +67,7 @@ func getDiskInfo() Disco {
 				continue
 			}
 			
-			porcentaje := int(math.Ceil(s.UsedPercent))
+			porcentaje := int(((s.Total - s.Free)*100/s.Total))
 			libre := fmt.Sprintf("%.1f", (float64(s.Free) / 1000000000.0))
 			total := fmt.Sprintf("%.1f", (float64(s.Total) / 1000000000.0))
 			usado := fmt.Sprintf("%.1f", (float64(s.Total - s.Free) / 1000000000.0))
@@ -89,39 +89,6 @@ func getRecursos() Recursos {
 	recursos := Recursos{CPU: getCPUInfo(), Disco: getDiskInfo()}
 	return recursos
 }
-
-/*
-func getDiskInfo() Disco {
-	formatter := "%-14s %7s %7s %7s %4s %s\n"
-	fmt.Printf(formatter, "Filesystem", "Size", "Used", "Avail", "Use%", "Mounted on")
-
-	parts, _ := disk.Partitions(true)
-	
-	for _, p := range parts {
-		device := p.Mountpoint
-		// solo funciona así en linux
-		//if device == "/" {
-			s, _ := disk.Usage(device)
-
-			if s.Total == 0 {
-				continue
-			}
-	
-			percent := fmt.Sprintf("%2.f%%", s.UsedPercent)
-	
-			fmt.Printf(formatter,
-				s.Fstype,
-				human.Bytes(s.Total),
-				human.Bytes(s.Used),
-				human.Bytes(s.Free),
-				percent,
-				p.Mountpoint,
-			)
-		//}
-	}
-	return Disco{}
-}
-*/
 
 func PruebaDisco() {
 	fmt.Println("siuuu")

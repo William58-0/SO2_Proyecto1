@@ -1,16 +1,31 @@
 import { useState } from 'react';
-import logo from './assets/images/logo-universal.png';
 import './App.css';
-import { Table, Card, Button } from 'react-bootstrap';
-import { Greet, WailsInit } from "../wailsjs/go/main/App";
-import { CircularProgressbar, CircularProgressbarWithChildren, buildStyles } from "react-circular-progressbar";
+import { Table, Card } from 'react-bootstrap';
+import { CircularProgressbarWithChildren, buildStyles } from "react-circular-progressbar";
 
 
 function App() {
     const [percentageCPU, setPercentageCPU] = useState(0);
-    const [percentageDisk, setPercentageDisk] = useState(0);
+    const [nucleosCPU, setNucleosCPU] = useState(0);
 
-    runtime.EventsOn("recursos", (content) => console.log(content))
+    const [percentageDisk, setPercentageDisk] = useState(0);
+    const [usadoDisk, setUsadoDisk] = useState(0);
+    const [libreDisk, setLibreDisk] = useState(0);
+    const [totalDisk, setTotalDisk] = useState(0);
+
+    runtime.EventsOn("recursos", (content) => {
+        console.log(content)
+        var json = JSON.parse(content)
+        console.log(json)
+
+        setPercentageCPU(json['CPU']['Porcentaje'])
+        setNucleosCPU(json['CPU']['Nucleos'])
+
+        setPercentageDisk(json['Disco']['Porcentaje'])
+        setUsadoDisk(json['Disco']['Usado'])
+        setLibreDisk(json['Disco']['Disponible'])
+        setTotalDisk(json['Disco']['Total'])
+    })
 
     function greet() {
         // Greet(name).then(updateResultText);
@@ -60,7 +75,7 @@ function App() {
                                     <tbody>
                                         <tr>
                                             <td >
-                                                2
+                                                {nucleosCPU}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -100,13 +115,13 @@ function App() {
                                     <tbody>
                                         <tr>
                                             <td >
-                                                2
+                                                {usadoDisk}
                                             </td>
                                             <td >
-                                                2
+                                                {libreDisk}
                                             </td>
                                             <td >
-                                                2
+                                                {totalDisk}
                                             </td>
                                         </tr>
                                     </tbody>
