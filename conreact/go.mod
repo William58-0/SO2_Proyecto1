@@ -3,6 +3,7 @@ module changeme
 go 1.18
 
 require (
+	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/wailsapp/wails v1.16.9
 	github.com/wailsapp/wails/v2 v2.3.1
 )
@@ -36,10 +37,13 @@ require (
 	github.com/samber/lo v1.27.1 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/syossan27/tebata v0.0.0-20180602121909-b283fe4bc5ba // indirect
+	github.com/tklauser/go-sysconf v0.3.11 // indirect
+	github.com/tklauser/numcpus v0.6.0 // indirect
 	github.com/tkrajina/go-reflector v0.5.5 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
 	github.com/wailsapp/mimetype v1.4.1 // indirect
+	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
 	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
 	golang.org/x/image v0.0.0-20201208152932-35266b937fa6 // indirect

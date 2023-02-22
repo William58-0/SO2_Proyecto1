@@ -5,42 +5,12 @@ import { Table, Card, Button } from 'react-bootstrap';
 import { Greet, WailsInit } from "../wailsjs/go/main/App";
 import { CircularProgressbar, CircularProgressbarWithChildren, buildStyles } from "react-circular-progressbar";
 
-/*
-function App() {
-    const [percentage, setPercentage] = useState(0);
 
-    function greet() {
-        // Greet(name).then(updateResultText);
-        setPercentage(50)
-    }
-
-    return (
-        <div id="App">
-            <div style={{ width: 200, height: 200 }}>
-                <CircularProgressbar
-                    value={percentage}
-                    text={`${percentage}%`}
-                />
-
-            </div>
-            <div style={{ width: 200, height: 200 }}>
-                <CircularProgressbarWithChildren value={percentage}>
-                    {}
-                    <img style={{ width: 60 }} src="https://i.imgur.com/b9NyUGm.png" alt="doge" />
-                    <div style={{fontSize: 50}}>
-                        <strong>{percentage}%</strong>
-                    </div>
-                </CircularProgressbarWithChildren>;
-
-            </div>
-            <button className="btn" onClick={greet}>dfafafda</button>
-        </div>
-    )
-}
-*/
 function App() {
     const [percentageCPU, setPercentageCPU] = useState(0);
     const [percentageDisk, setPercentageDisk] = useState(0);
+
+    runtime.EventsOn("recursos", (content) => console.log(content))
 
     function greet() {
         // Greet(name).then(updateResultText);

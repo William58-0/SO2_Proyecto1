@@ -8,6 +8,7 @@ import (
 	//"github.com/shirou/gopsutil/cpu"
 	"github.com/wailsapp/wails"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"encoding/json"
 )
 
 // App struct
@@ -27,11 +28,15 @@ func (a *App) startup(ctx context.Context) {
 
 	go func() {
 		for {
-			fmt.Println("ejecutando")
-			PruebaDisco()
-			// ctx.Events.Emit("cpu_usage")
-			//EventsEmit(ctx, "cpu_usage")
-			runtime.EventsEmit(ctx, "cpu_usage","hola")
+			resources := getRecursos()
+			json, err := json.Marshal(resources)
+			if err != nil {
+				fmt.Printf("Error: %s", err)
+				return;
+			}
+			fmt.Println(string(json))
+
+			runtime.EventsEmit(ctx, "recursos",string(json))
 			time.Sleep(1 * time.Second)
 		}
 	}()
