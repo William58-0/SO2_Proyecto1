@@ -12,7 +12,7 @@ function App() {
     const [usadoDisk, setUsadoDisk] = useState(0);
     const [libreDisk, setLibreDisk] = useState(0);
     const [totalDisk, setTotalDisk] = useState(0);
-
+    
     runtime.EventsOn("recursos", (content) => {
         // console.log(content)
         var json = JSON.parse(content)
@@ -26,7 +26,7 @@ function App() {
         setLibreDisk(json['Disco']['Disponible'])
         setTotalDisk(json['Disco']['Total'])
     })
-
+    
     function colorPorcentaje(valor) {
         if (valor <= 33) {
             return '#6495ED'
@@ -54,7 +54,7 @@ function App() {
                                             pathColor: colorPorcentaje(percentageCPU),
                                         })}>
                                         { }
-                                        <img style={{ width: 110 }} src="https://i.imgur.com/b9NyUGm.png" alt="doge" />
+                                        <img style={{ width: 110 }} src="https://cdn-icons-png.flaticon.com/512/4617/4617522.png" alt="doge" />
                                         <div style={{ fontSize: 30 }}>
                                             <strong>{percentageCPU}%</strong>
                                         </div>
@@ -91,7 +91,7 @@ function App() {
                                             pathColor: colorPorcentaje(percentageDisk),
                                         })}>
                                         { }
-                                        <img style={{ width: 110 }} src="https://i.imgur.com/b9NyUGm.png" alt="doge" />
+                                        <img style={{ width: 110 }} src="https://cdn-icons-png.flaticon.com/512/287/287441.png" alt="doge" />
                                         <div style={{ fontSize: 30 }}>
                                             <strong>{percentageDisk}%</strong>
                                         </div>
