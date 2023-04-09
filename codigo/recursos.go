@@ -33,6 +33,7 @@ type Disco struct {
 type Recursos struct {
 	CPU CPU `json:"CPU"`
 	Disco Disco `json:"Disco"`
+	Memoria Memoria `json:"Memoria"`
 }
 
 func getCPUInfo() CPU {
@@ -86,7 +87,7 @@ func getDiskInfo() Disco {
 }
 
 func getRecursos() Recursos {
-	recursos := Recursos{CPU: getCPUInfo(), Disco: getDiskInfo()}
+	recursos := Recursos{CPU: getCPUInfo(), Disco: getDiskInfo(), Memoria: getMemoriaInfo()}
 	return recursos
 }
 
