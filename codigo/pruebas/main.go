@@ -4,19 +4,13 @@ import (
     "fmt"
     "os/exec"
 	"strings"
-	"strconv"
 )
 
-// Memoria struct
-type Memoria struct {
-	Total string `json:"Total"`
-	Usado string `json:"Usado"`
-	Porcentaje string `json:"Porcentaje"`
-}
-
-// https://www.educative.io/answers/how-to-execute-linux-commands-in-golang
-func EjecutarComando(cmd string, args string) string{
-    out, err := exec.Command(cmd, args).Output()
+// sudo chmod 777 /media/
+func main() {
+	/*
+	// una forma de habilitar 777 y desabilitar 000
+	out, err := exec.Command("sudo", "chmod", "777", "/media/").Output()
 
     if err != nil {
         fmt.Printf("%s", err)
@@ -24,67 +18,66 @@ func EjecutarComando(cmd string, args string) string{
 
     output := string(out[:])
 
-	return output
-}
+	fmt.Println(output)
+	*/
 
+	// listar archivos en USB
+	// ls /media/ -R
+	archivosUSB, err := exec.Command("ls", "/media/", "-R").Output()
 
-func QuitarEspacios(texto string) []string{
-    arreglo := strings.Split(texto, " ");
-	var nuevo []string
+	if err != nil{
+		return
+	}
+
+	conDivisionCarpeta := strings.Replace(string(archivosUSB), "\n\n", "\n<<DIVISION_CARPETA>>\n", -1)
+
+	fmt.Println(string(conDivisionCarpeta))
+	fmt.Println("\n")
+
+	arregloArchivosUSB := strings.Split(string(conDivisionCarpeta), "\n")
+
+	fmt.Println(arregloArchivosUSB)
+
+	// recortar arreglo, porque las primeras no contienen archivos de USB
+	recortado := arregloArchivosUSB[2:len(arregloArchivosUSB)]
+
+	fmt.Println(recortado)
+
+	// crear direcciones absolutas
+	//var concatenar = false
+	var carpeta = ""
+	var direccionesAbs []string
+
+	for i := 0; i < len(recortado); i++ {
+		palabra := recortado[i]
+
+		if palabra == "<<DIVISION_CARPETA>>"{
+			// hay que concatenar
+			// concatenar = true
+
+			// el siguiente elemento del arreglo es la carpeta
+			carpeta = strings.Replace(recortado[i+1], ":", "/",-1)
+			i = i+1;
+			fmt.Println("aqui tuvo que haber saltado", carpeta)
+			continue
+		}
 	
-	for i := 0; i < len(arreglo); i++ {
-		nueva := strings.Replace(arreglo[i], " ", "",-1)
-		if(nueva != ""){
-			nuevo = append(nuevo, nueva)
+		if(palabra != "" && strings.Count(carpeta, "/") >3){
+			concatenado := carpeta + palabra
+			direccionesAbs = append(direccionesAbs, concatenado)
 		}
 		
 	}
 
-	return nuevo
-}
-
-func getMemoriaInfo() Memoria{
-	factorGb := 1024 * 1024 * 1024;
-	memoria := Memoria{}
-
-	resultado := EjecutarComando("free", "-b")
+	fmt.Println("CONCATENADO")
+	fmt.Println(direccionesAbs)
 	
-	// quitar lineas innecesarias
-    sinSaltos := strings.Split(resultado,"\n")[1]
+	/*
+	// sinSaltos := strings.Replace(string(archivosUSB), "\n\n", "\n", -1)
+	sinSaltos1 := strings.Replace(string(archivosUSB), ":\n", "", -1)
 
-	// total de memoria
-	total := QuitarEspacios(sinSaltos)[1]
-	total1, err := strconv.Atoi(total)
-	if err != nil {
-		return memoria
-	}
-	total2 := fmt.Sprintf("%.2f", (float64(total1) / float64(factorGb)))
+	// listaArchivosUSB := strings.Split(string(archivosUSB), "\n\n")
+	fmt.Println(sinSaltos1)
+	*/
 
-
-	// memoria utilizada
-	usado := QuitarEspacios(sinSaltos)[2]
-	usado1, err := strconv.Atoi(usado)
-	if err != nil {
-		return memoria
-	}
-	usado2 := fmt.Sprintf("%.2f", (float64(usado1) / float64(factorGb)))
-
-
-	// porcentaje
-	porcentaje := (float64(usado1) / float64(total1)) * 100
-	porcentaje1 := fmt.Sprintf("%.2f", porcentaje)
-
-	memoria = Memoria{
-		Total: total2,
-		Usado: usado2,
-		Porcentaje: porcentaje1,
-	}
-
-	return memoria
-}
-
-
-func main() {
-    memoria := getMemoriaInfo();
-	fmt.Println(memoria);
 }

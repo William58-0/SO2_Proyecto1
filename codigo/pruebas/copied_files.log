@@ -1,0 +1,26 @@
+sending incremental file list
+./
+24FD-1E41/
+24FD-1E41/hola
+24FD-1E41/hola2
+24FD-1E41/.Trash-1000/
+24FD-1E41/.Trash-1000/expunged/
+24FD-1E41/.Trash-1000/files/
+24FD-1E41/.Trash-1000/info/
+
+Number of files: 8 (reg: 2, dir: 6)
+Number of created files: 7 (reg: 2, dir: 5)
+Number of deleted files: 0
+Number of regular files transferred: 2
+Total file size: 10 bytes
+Total transferred file size: 10 bytes
+Literal data: 0 bytes
+Matched data: 0 bytes
+File list size: 0
+File list generation time: 0.001 seconds
+File list transfer time: 0.000 seconds
+Total bytes sent: 248
+Total bytes received: 45
+
+sent 248 bytes  received 45 bytes  586.00 bytes/sec
+total size is 10  speedup is 0.03 (DRY RUN)
