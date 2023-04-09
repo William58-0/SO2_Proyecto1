@@ -90,7 +90,3 @@ func getRecursos() Recursos {
 	recursos := Recursos{CPU: getCPUInfo(), Disco: getDiskInfo(), Memoria: getMemoriaInfo()}
 	return recursos
 }
-
-func PruebaDisco() {
-	fmt.Println("siuuu")
-}
