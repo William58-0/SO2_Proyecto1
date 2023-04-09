@@ -82,9 +82,3 @@ func getMemoriaInfo() Memoria{
 
 	return memoria
 }
-
-
-func main() {
-    memoria := getMemoriaInfo();
-	fmt.Println(memoria);
-}
