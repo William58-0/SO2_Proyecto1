@@ -5,7 +5,6 @@ package bitacora
 import (
 	"encoding/json"
 	"io/ioutil"
-    "fmt"
 )
 
 type Log struct {
@@ -22,7 +21,7 @@ func EscribirJSON(arregloLogs []Log) {
 	file, _ := json.MarshalIndent(data, "", " ")
  
 	_ = ioutil.WriteFile("bitacora.json", file, 0644)
-    _ = ioutil.WriteFile("/var/log/bitacoraUSB.txt", file, 0644)
+    _ = ioutil.WriteFile("/tmp/bitacoraUSB.txt", file, 0644)
 }
 
 func LeerJSON() Logs{
@@ -40,7 +39,7 @@ func AgregarBitacora(log Log){
     if(ExisteEnBitacora(log)){
         return
     }
-    fmt.Println("Agregando a bitacora")
+    // fmt.Println("Agregando a bitacora")
     logs := LeerJSON();
 
     arregloLogs := logs.Bitacora;

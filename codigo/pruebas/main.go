@@ -3,7 +3,7 @@ package main
 import (
     "fmt"
     "os/exec"
-	// "os"
+	"os"
 	"strings"
 	"io/ioutil"
 
@@ -18,6 +18,7 @@ type Archivo struct {
 }
 
 var archivosActuales []Archivo
+var tienePermisos bool
 
 func compararTiempo(archivo1 string, archivo2 string) (bool, string) {
 	out, err := exec.Command("stat", archivo1, archivo2).Output()
@@ -106,18 +107,13 @@ func comprararArchivos(ruta1 string, ruta2 string) bool{
 }
 
 func verificarArchivosCopiados(){
+	if(!tienePermisos){
+		return
+	}
 	archivosActuales = obtenerArchivosUSB();
 
 	// para los archivos en las usb
 	for i:=0; i<len(archivosActuales); i++{
-		/*
-		// limpiar consola
-		cmd := exec.Command("clear")
-		cmd.Stdout = os.Stdout
-		cmd.Run()
-		*/
-
-		// fmt.Println("Analizando archivos...")
 
 		nombreArchivo := getNombreArchivo(archivosActuales[i].Ruta);
 
@@ -166,39 +162,32 @@ func verificarArchivosCopiados(){
 }
 
 func AnalizarArchivos(){
+	if(!tienePermisos){
+		return
+	}
 	archivosActuales = obtenerArchivosUSB();
 
 	for {
-		// verificarCopiadosHaciaUSB();
 		verificarArchivosCopiados()
-		// limpiar consola
-		/*
-		cmd := exec.Command("clear")
-		cmd.Stdout = os.Stdout
-		cmd.Run()
-		// MostrarMenu()
-		fmt.Println("Analizando archivos...")
-		*/
+
 		time.Sleep(2 * time.Second)
 		
 	}
 }
 
 func MostrarMenu(){
-	tienePermisos := false
-
 	// verificar si tiene permisos de usb
-	files, err := ioutil.ReadDir("/media/")
+	_, err := ioutil.ReadDir("/media/")
     if err != nil {
-		fmt.Println(files, err)
+		fmt.Println(err)
+		tienePermisos = false
     } else {
 		tienePermisos = true
-		
 	}
 
 	mensajePermisos := ""
 	quitarConceder := "Quitar"
-	rutaBitacora := "/var/log/bitacoraUSB.txt"
+	rutaBitacora := "/tmp/bitacoraUSB.txt"
 
 	if (tienePermisos){
 		mensajePermisos = "Los puertos USB están DESBLOQUEADOS"
@@ -208,52 +197,52 @@ func MostrarMenu(){
 		quitarConceder = "Desbloquear"
 	}
 
-	menu:= "---- William Alejandro Borrayo Alarcón - 201909103 ----\n"+
+	menu:= "\n---- William Alejandro Borrayo Alarcón - 201909103 ----\n\n"+
 	mensajePermisos+"\n"+
 	"Path de bitácora: " + rutaBitacora + "\n\n"+
 	"Seleccione una opción:\n"+
 	"1. "+quitarConceder+" puertos USB \n"+
-	"2. Mostrar ruta de bitácora \n"+
-	"3. Salir\n"
+	"2. Salir\n"
 
 
 	for{
-		go AnalizarArchivos()
+		// para analizar archivos copiados en segundo plano
+		if(tienePermisos){
+			go AnalizarArchivos()
+		}
+		
 		fmt.Print(menu)
 
-		var eleccion int //Declarar variable y tipo antes de escanear, esto es obligatorio
+		var eleccion int
 		fmt.Scanln(&eleccion)
 
 		switch eleccion {
 		case 1:
-			fmt.Println("Prefieres pizza")
-		case 2:
-			fmt.Println("Prefieres tacos")
+			if(tienePermisos){
+				_, err := exec.Command("sudo", "chmod", "000", "/media/").Output()
+				if err != nil {
+					fmt.Printf("%s", err)
+				}
+
+				tienePermisos = false
+				fmt.Println("\n----- Se han bloqueado los puertos USB -----\n")		
+			} else {
+				_, err := exec.Command("sudo", "chmod", "777", "/media/").Output()
+				if err != nil {
+					fmt.Printf("%s", err)
+				}
+				tienePermisos = true
+				fmt.Println("\n----- Se han desbloqueado los puertos USB -----\n")
+			}
+			MostrarMenu()
 		default:
-			fmt.Println("No prefieres ninguno de ellos")
-			return
+			fmt.Println("\nAdiós!\n")
+			os.Exit(0)
 		}
 	}
 }
 
 // sudo chmod 777 /media/
 func main() {
-	/*
-	// una forma de habilitar 777 y desabilitar 000
-	out, err := exec.Command("sudo", "chmod", "777", "/media/").Output()
-
-    if err != nil {
-        fmt.Printf("%s", err)
-    }
-
-    output := string(out[:])
-
-	fmt.Println(output)
-	*/
-
-		
-		MostrarMenu()
-
-	
-
+	MostrarMenu()
 }
