@@ -3,6 +3,7 @@ package main
 import (
     "fmt"
     "os/exec"
+	"os"
 	"strings"
 
 	"USB/bitacora"
@@ -23,13 +24,8 @@ func compararTiempo(archivo1 string, archivo2 string) (bool, string) {
 
 	output := string(out[:])
 
-	fmt.Println(output)
-
 	acceso1 := strings.Split(string(output), "\n")[7][8:27]
 	acceso2 := strings.Split(string(output), "\n")[15][8:27]
-
-	fmt.Println(acceso1)
-	fmt.Println(acceso2)
 
 	time1, error := time.Parse("2006-01-02 15:04:05", acceso1)
 	if error != nil {
@@ -111,7 +107,13 @@ func verificarArchivosCopiados(){
 
 	// para los archivos en las usb
 	for i:=0; i<len(archivosActuales); i++{
-		fmt.Println("todo bien")
+		// limpiar consola
+		cmd := exec.Command("clear")
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+
+		fmt.Println("Analizando archivos...")
+
 		nombreArchivo := getNombreArchivo(archivosActuales[i].Ruta);
 
 		// buscar archivo en la computadora
@@ -132,11 +134,9 @@ func verificarArchivosCopiados(){
 
 				// verificar si son iguales
 				if(comprararArchivos(archivosActuales[i].Ruta, archivosEnCompu[j])){
-					fmt.Println("agregar a bitacora")
 					menor, tiempo := compararTiempo(archivosActuales[i].Ruta, archivosEnCompu[j])
 					if(menor){
 						// desde usb
-						fmt.Println("caso1")
 						log := bitacora.Log{
 							Tipo: "Desde USB",
 							Origen: archivosActuales[i].Ruta,
@@ -145,7 +145,6 @@ func verificarArchivosCopiados(){
 						bitacora.AgregarBitacora(log)
 					} else {
 						// hacia usb
-						fmt.Println("caso2")
 						log := bitacora.Log{
 							Tipo: "Hacia USB",
 							Origen: archivosEnCompu[j],
@@ -179,7 +178,14 @@ func main() {
 	for {
 		// verificarCopiadosHaciaUSB();
 		verificarArchivosCopiados()
-		time.Sleep(3 * time.Second)
+		// limpiar consola
+		cmd := exec.Command("clear")
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+		fmt.Println("Analizando archivos...")
+		
+		time.Sleep(2 * time.Second)
+		
 	}
 
 }

@@ -30,13 +30,6 @@ func LeerJSON() Logs{
 	data := Logs{}
  
 	_ = json.Unmarshal([]byte(file), &data)
- 
-	for i := 0; i < len(data.Bitacora); i++ {
-		fmt.Println("Tipo ", data.Bitacora[i].Tipo)
-        fmt.Println("Origen ", data.Bitacora[i].Origen)
-        fmt.Println("Destino ", data.Bitacora[i].Destino)
-        fmt.Println("FechaHora ", data.Bitacora[i].FechaHora,"\n")
-	}
 
     return data
  
@@ -46,22 +39,12 @@ func AgregarBitacora(log Log){
     if(ExisteEnBitacora(log)){
         return
     }
-    fmt.Println("entraa")
+    fmt.Println("Agregando a bitacora")
     logs := LeerJSON();
-
-    fmt.Println("logs iniciales")
-    fmt.Println(logs)
 
     arregloLogs := logs.Bitacora;
 
     arregloLogs = append(arregloLogs, log);
-
-    for i := 0; i < len(arregloLogs); i++ {
-		fmt.Println("Tipo ", arregloLogs[i].Tipo)
-        fmt.Println("Origen ", arregloLogs[i].Origen)
-        fmt.Println("Destino ", arregloLogs[i].Destino)
-        fmt.Println("FechaHora ", arregloLogs[i].FechaHora,"\n")
-	}
 
     EscribirJSON(arregloLogs);
 }
@@ -78,11 +61,9 @@ func ExisteEnBitacora(log Log) bool{
             existe = true;
             break;
         }
-	} 
-
-    fmt.Println("llega aquii")
-    fmt.Println(existe)
+	}
 
     return existe
+    
 }
 
