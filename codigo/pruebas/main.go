@@ -153,6 +153,8 @@ func main() {
 	}
 	*/
 
-	bitacora.HacerEjemplo();
+	//bitacora.EscribirJSON();
+
+	bitacora.LeerJSON();
 
 }

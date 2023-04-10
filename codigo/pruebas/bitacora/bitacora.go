@@ -5,45 +5,44 @@ package bitacora
 import (
 	"encoding/json"
 	"io/ioutil"
+    "fmt"
 )
- 
-type Salary struct {
-    Basic, HRA, TA float64
+
+type Log struct {
+    Tipo, Nombre, FechaHora string
+}
+
+type Logs struct {
+    Bitacora []Log
 }
  
-type Employee struct {
-	FirstName, LastName, Email string
-	Age                        int
-	MonthlySalary              []Salary
-}
- 
-func HacerEjemplo() {
-	data := Employee{
-        FirstName: "Mark",
-        LastName:  "Jones",
-        Email:     "mark@gmail.com",
-        Age:       25,
-        MonthlySalary: []Salary{
-            Salary{
-                Basic: 15000.00,
-                HRA:   5000.00,
-                TA:    2000.00,
-            },
-            Salary{
-                Basic: 16000.00,
-                HRA:   5000.00,
-                TA:    2100.00,
-            },
-            Salary{
-                Basic: 17000.00,
-                HRA:   5000.00,
-                TA:    2200.00,
-            },
-        },
-    }
+func EscribirJSON() {
+    log := Log{Tipo: "Hacia USB", Nombre:"archivo1", FechaHora: "hoy"}
+    var logs []Log
+
+    logs = append(logs, log)
+    logs = append(logs, log)
+    logs = append(logs, log)
+
+	data := Logs{Bitacora: logs}
  
 	file, _ := json.MarshalIndent(data, "", " ")
  
 	_ = ioutil.WriteFile("test.json", file, 0644)
+}
+
+func LeerJSON() {
+	file, _ := ioutil.ReadFile("test.json")
+ 
+	data := Logs{}
+ 
+	_ = json.Unmarshal([]byte(file), &data)
+ 
+	for i := 0; i < len(data.Bitacora); i++ {
+		fmt.Println("Tipo ", data.Bitacora[i].Tipo)
+        fmt.Println("Nombre ", data.Bitacora[i].Nombre)
+        fmt.Println("FechaHora ", data.Bitacora[i].FechaHora,"\n")
+	}
+ 
 }
 
