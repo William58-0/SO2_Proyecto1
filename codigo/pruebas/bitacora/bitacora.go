@@ -60,3 +60,22 @@ func AgregarBitacora(log Log){
     EscribirJSON(arregloLogs);
 }
 
+func ExisteEnBitacora(log Log){
+    logs := LeerJSON();
+
+    arregloLogs := logs.Bitacora;
+
+    existe := false
+
+    for i := 0; i < len(arregloLogs); i++ {
+        if(arregloLogs[i].Tipo == log.Tipo && arregloLogs[i].Archivo == log.Archivo ){
+            existe = true;
+            break;
+        }
+	} 
+
+    if(!existe){
+        AgregarBitacora(log);
+    }
+}
+
