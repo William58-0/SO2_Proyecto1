@@ -2,48 +2,33 @@
  "Bitacora": [
   {
    "Tipo": "Hacia USB",
-   "Archivo": "",
-   "FechaHora": "hoy"
+   "Origen": "/home/william/hola",
+   "Destino": "/media/william/24FD-1E41/hola",
+   "FechaHora": "2023-04-09 23:25:28"
   },
   {
    "Tipo": "Hacia USB",
-   "Archivo": "",
-   "FechaHora": "hoy"
-  },
-  {
-   "Tipo": "Hacia USB",
-   "Archivo": "",
-   "FechaHora": "hoy"
-  },
-  {
-   "Tipo": "Hacia USB",
-   "Archivo": "/media/william/24FD-1E41/hola2",
-   "FechaHora": "2023-04-09 19:56:51.890054124 -0600 CST m=+8.075230857"
-  },
-  {
-   "Tipo": "Hacia USB",
-   "Archivo": "/media/william/24FD-1E41/nuevoo.txt",
-   "FechaHora": "2023-49-09 19:59:04"
-  },
-  {
-   "Tipo": "Hacia USB",
-   "Archivo": "/media/william/24FD-1E41/nuevoo.txt",
-   "FechaHora": "2023-04-09 19:59:40"
-  },
-  {
-   "Tipo": "Hacia USB",
-   "Archivo": "/media/william/24FD-1E41/hola2",
-   "FechaHora": "2023-04-09 20:06:10"
+   "Origen": "/home/william/Documents/hola2",
+   "Destino": "/media/william/24FD-1E41/hola2",
+   "FechaHora": "2023-04-09 23:25:29"
   },
   {
    "Tipo": "Desde USB",
-   "Archivo": "/home/william/Documents/hola",
-   "FechaHora": "2023-04-09 22:20:58"
+   "Origen": "/media/william/24FD-1E41/hola",
+   "Destino": "/home/william/Desktop/hola",
+   "FechaHora": "2023-04-09 23:25:56"
   },
   {
    "Tipo": "Desde USB",
-   "Archivo": "/home/william/Desktop/nuevoo.txt",
-   "FechaHora": "2023-04-09 22:26:10"
+   "Origen": "/media/william/24FD-1E41/FolderUSB1/archivoUSB1",
+   "Destino": "/home/william/Desktop/FolderUSB1/archivoUSB1",
+   "FechaHora": "2023-04-09 23:26:36"
+  },
+  {
+   "Tipo": "Desde USB",
+   "Origen": "/media/william/24FD-1E41/FolderUSB1",
+   "Destino": "/home/william/Desktop/FolderUSB1",
+   "FechaHora": "2023-04-09 23:26:40"
   }
  ]
 }

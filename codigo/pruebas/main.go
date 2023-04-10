@@ -16,7 +16,6 @@ type Archivo struct {
 }
 
 var archivosActuales []Archivo
-var usbsActuales []string
 
 func compararTiempo(archivo1 string, archivo2 string) bool {
 	out, err := exec.Command("stat", archivo1, archivo2).Output()
@@ -84,75 +83,7 @@ func obtenerArchivosUSB() []Archivo{
 	return ListaArchivos
 }
 
-// -------------------------------------------------------- HACIA USB
-func ListarUSBS() []string{
-	var usbs []string
-	// listar archivos en USB
-	// ls /media/ -R
-	archivosUSB, err := exec.Command("ls", "/media/", "-R").Output()
-	if err != nil{	
-	}
-
-	conDivisionCarpeta := strings.Replace(string(archivosUSB), "\n\n", "\n<<DIVISION_CARPETA>>\n", -1)
-
-	arregloArchivosUSB := strings.Split(string(conDivisionCarpeta), "\n")
-
-	// listar usb's
-	for u:= 4; u<len(arregloArchivosUSB); u++ {
-		if(arregloArchivosUSB[u] == "<<DIVISION_CARPETA>>"){
-			break
-		} else {
-			usbs = append(usbs, arregloArchivosUSB[u])
-		}
-	}
-
-	return usbs
-}
-
-func verificarCopiadosHaciaUSB(){
-	// nueva lectura de archivos
-	nuevaLecturaArchivosUSB := obtenerArchivosUSB();
-	
-	if (len(nuevaLecturaArchivosUSB) > len(archivosActuales)){
-		for i:=0; i<len(nuevaLecturaArchivosUSB); i++ {
-			contiene := USBContains(archivosActuales, nuevaLecturaArchivosUSB[i])
-
-			// si el archivo nuevo de usb no está en los que leyó inicialmente
-			if(!contiene){
-				// si es de usb existente se agrega a bitacora, de lo contrario se omite
-				if(ExisteUSB(usbsActuales, nuevaLecturaArchivosUSB[i].USB)){
-					fmt.Println("Se agrega a bitácora")
-					log := bitacora.Log{
-						Tipo: "Hacia USB",
-						Archivo: nuevaLecturaArchivosUSB[i].Ruta,
-						FechaHora: time.Now().Format("2006-01-02 15:04:05")}
-					bitacora.ExisteEnBitacora(log)
-				}
-			}
-		}
-	}
-	archivosActuales = nuevaLecturaArchivosUSB
-}
-
-func USBContains(arreglo []Archivo, estruct Archivo) bool{
-	for i:=0; i<len(arreglo); i++{
-		if (arreglo[i] == estruct){
-			return true
-		}
-	}
-	return false
-}	
-
-func ExisteUSB(usbs []string, nombre string) bool{
-	for i:=0; i<len(usbs); i++{
-		if (usbs[i] == nombre){
-			return true
-		}
-	}
-	return false
-}	
-
-// -------------------------------------------------------- DESDE USB
+// --------------------------------------------------------
 func getNombreArchivo(ruta string) string{
 	division := strings.Split(ruta, "/")
 
@@ -168,9 +99,12 @@ func comprararArchivos(ruta1 string, ruta2 string) bool{
 	return strings.Contains(string(output), "identical")
 }
 
-func verificarCopiadosDesdeUSB(){
+func verificarArchivosCopiados(){
+	archivosActuales = obtenerArchivosUSB();
+
 	// para los archivos en las usb
 	for i:=0; i<len(archivosActuales); i++{
+		fmt.Println("todo bien")
 		nombreArchivo := getNombreArchivo(archivosActuales[i].Ruta);
 
 		// buscar archivo en la computadora
@@ -184,17 +118,33 @@ func verificarCopiadosDesdeUSB(){
 			archivosEnCompu := strings.Split(string(output), "\n");
 
 			for j:=0; j<len(archivosEnCompu); j++{
+				// ignorar los que estén en la papelera
+				if(strings.Contains(archivosEnCompu[j], "share/Trash/")){
+					continue
+				}
+
 				// verificar si son iguales
 				if(comprararArchivos(archivosActuales[i].Ruta, archivosEnCompu[j])){
 					fmt.Println("agregar a bitacora")
+					
 					if(compararTiempo(archivosActuales[i].Ruta, archivosEnCompu[j])){
-						// comprobar que no exista ya en la bitacora
-						fmt.Println("Se agrega a bitácora")
+						// desde usb
+						fmt.Println("caso1")
 						log := bitacora.Log{
 							Tipo: "Desde USB",
-							Archivo: archivosEnCompu[j],
+							Origen: archivosActuales[i].Ruta,
+							Destino: archivosEnCompu[j],
 							FechaHora: time.Now().Format("2006-01-02 15:04:05")}
-						bitacora.ExisteEnBitacora(log)
+						bitacora.AgregarBitacora(log)
+					} else {
+						// hacia usb
+						fmt.Println("caso2")
+						log := bitacora.Log{
+							Tipo: "Hacia USB",
+							Origen: archivosEnCompu[j],
+							Destino: archivosActuales[i].Ruta,
+							FechaHora: time.Now().Format("2006-01-02 15:04:05")}
+						bitacora.AgregarBitacora(log)
 					}
 				}
 			}
@@ -218,11 +168,10 @@ func main() {
 	*/
 
 	archivosActuales = obtenerArchivosUSB();
-	usbsActuales = ListarUSBS();
 
 	for {
-		verificarCopiadosHaciaUSB();
-		verificarCopiadosDesdeUSB();
+		// verificarCopiadosHaciaUSB();
+		verificarArchivosCopiados()
 		time.Sleep(3 * time.Second)
 	}
 

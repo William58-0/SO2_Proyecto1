@@ -9,7 +9,7 @@ import (
 )
 
 type Log struct {
-    Tipo, Archivo, FechaHora string
+    Tipo, Origen, Destino, FechaHora string
 }
 
 type Logs struct {
@@ -33,7 +33,8 @@ func LeerJSON() Logs{
  
 	for i := 0; i < len(data.Bitacora); i++ {
 		fmt.Println("Tipo ", data.Bitacora[i].Tipo)
-        fmt.Println("Archivo ", data.Bitacora[i].Archivo)
+        fmt.Println("Origen ", data.Bitacora[i].Origen)
+        fmt.Println("Destino ", data.Bitacora[i].Destino)
         fmt.Println("FechaHora ", data.Bitacora[i].FechaHora,"\n")
 	}
 
@@ -42,6 +43,10 @@ func LeerJSON() Logs{
 }
 
 func AgregarBitacora(log Log){
+    if(ExisteEnBitacora(log)){
+        return
+    }
+    fmt.Println("entraa")
     logs := LeerJSON();
 
     fmt.Println("logs iniciales")
@@ -53,14 +58,15 @@ func AgregarBitacora(log Log){
 
     for i := 0; i < len(arregloLogs); i++ {
 		fmt.Println("Tipo ", arregloLogs[i].Tipo)
-        fmt.Println("Archivo ", arregloLogs[i].Archivo)
+        fmt.Println("Origen ", arregloLogs[i].Origen)
+        fmt.Println("Destino ", arregloLogs[i].Destino)
         fmt.Println("FechaHora ", arregloLogs[i].FechaHora,"\n")
 	}
 
     EscribirJSON(arregloLogs);
 }
 
-func ExisteEnBitacora(log Log){
+func ExisteEnBitacora(log Log) bool{
     logs := LeerJSON();
 
     arregloLogs := logs.Bitacora;
@@ -68,14 +74,15 @@ func ExisteEnBitacora(log Log){
     existe := false
 
     for i := 0; i < len(arregloLogs); i++ {
-        if(arregloLogs[i].Tipo == log.Tipo && arregloLogs[i].Archivo == log.Archivo ){
+        if(arregloLogs[i].Tipo == log.Tipo && arregloLogs[i].Destino == log.Destino ){
             existe = true;
             break;
         }
 	} 
 
-    if(!existe){
-        AgregarBitacora(log);
-    }
+    fmt.Println("llega aquii")
+    fmt.Println(existe)
+
+    return existe
 }
 
