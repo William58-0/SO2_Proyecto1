@@ -213,27 +213,31 @@ func MostrarMenu(){
 		
 		fmt.Print(menu)
 
+		// pedir numero
 		var eleccion int
 		fmt.Scanln(&eleccion)
 
 		switch eleccion {
 		case 1:
-			if(tienePermisos){
-				_, err := exec.Command("sudo", "chmod", "000", "/media/").Output()
-				if err != nil {
-					fmt.Printf("%s", err)
+			if(Autenticar()){
+				if(tienePermisos){
+					_, err := exec.Command("sudo", "chmod", "000", "/media/").Output()
+					if err != nil {
+						fmt.Printf("%s", err)
+					}
+	
+					tienePermisos = false
+					fmt.Println("\n----- Se han bloqueado los puertos USB -----\n")		
+				} else {
+					_, err := exec.Command("sudo", "chmod", "777", "/media/").Output()
+					if err != nil {
+						fmt.Printf("%s", err)
+					}
+					tienePermisos = true
+					fmt.Println("\n----- Se han desbloqueado los puertos USB -----\n")
 				}
-
-				tienePermisos = false
-				fmt.Println("\n----- Se han bloqueado los puertos USB -----\n")		
-			} else {
-				_, err := exec.Command("sudo", "chmod", "777", "/media/").Output()
-				if err != nil {
-					fmt.Printf("%s", err)
-				}
-				tienePermisos = true
-				fmt.Println("\n----- Se han desbloqueado los puertos USB -----\n")
 			}
+			
 			MostrarMenu()
 		default:
 			fmt.Println("\nAdiós!\n")
@@ -242,7 +246,30 @@ func MostrarMenu(){
 	}
 }
 
+func Autenticar() bool{
+	// pedir usuario y contraseña
+	var usuario string
+	var contrasenia string
+
+	fmt.Println("\n-- Ingrese los datos de autenticación--\n")
+	fmt.Println("Usuario:")
+	fmt.Scanln(&usuario)
+
+	fmt.Println("Contraseña:")
+	fmt.Scanln(&contrasenia)
+
+	if(usuario == "william" && contrasenia == "201909103"){
+		return true
+	}
+
+	fmt.Println("\nUsuario y contraseña incorrectos\n")
+	return false
+}
+
 // sudo chmod 777 /media/
 func main() {
+	for !Autenticar(){
+
+	}
 	MostrarMenu()
 }
