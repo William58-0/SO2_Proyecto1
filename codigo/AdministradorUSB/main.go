@@ -7,7 +7,7 @@ import (
 	"strings"
 	"io/ioutil"
 
-	"USB/bitacora"
+	"201909103/bitacora"
 
 	"time"
 )
