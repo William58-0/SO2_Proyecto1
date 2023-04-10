@@ -2,18 +2,33 @@
  "Bitacora": [
   {
    "Tipo": "Hacia USB",
-   "Nombre": "archivo1",
+   "Archivo": "",
    "FechaHora": "hoy"
   },
   {
    "Tipo": "Hacia USB",
-   "Nombre": "archivo1",
+   "Archivo": "",
    "FechaHora": "hoy"
   },
   {
    "Tipo": "Hacia USB",
-   "Nombre": "archivo1",
+   "Archivo": "",
    "FechaHora": "hoy"
+  },
+  {
+   "Tipo": "Hacia USB",
+   "Archivo": "/media/william/24FD-1E41/hola2",
+   "FechaHora": "2023-04-09 19:56:51.890054124 -0600 CST m=+8.075230857"
+  },
+  {
+   "Tipo": "Hacia USB",
+   "Archivo": "/media/william/24FD-1E41/nuevoo.txt",
+   "FechaHora": "2023-49-09 19:59:04"
+  },
+  {
+   "Tipo": "Hacia USB",
+   "Archivo": "/media/william/24FD-1E41/nuevoo.txt",
+   "FechaHora": "2023-04-09 19:59:40"
   }
  ]
 }
