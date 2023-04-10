@@ -3,8 +3,9 @@ package main
 import (
     "fmt"
     "os/exec"
-	"os"
+	// "os"
 	"strings"
+	"io/ioutil"
 
 	"USB/bitacora"
 
@@ -95,7 +96,9 @@ func getNombreArchivo(ruta string) string{
 
 func comprararArchivos(ruta1 string, ruta2 string) bool{
 	out, err := exec.Command("diff", "-sqr", ruta1, ruta2).Output()
-	if err != nil { fmt.Printf("%s", err) }
+	if err != nil { 
+		//fmt.Printf("%s", err) 
+	}
 
 	output := string(out[:])
 
@@ -107,18 +110,22 @@ func verificarArchivosCopiados(){
 
 	// para los archivos en las usb
 	for i:=0; i<len(archivosActuales); i++{
+		/*
 		// limpiar consola
 		cmd := exec.Command("clear")
 		cmd.Stdout = os.Stdout
 		cmd.Run()
+		*/
 
-		fmt.Println("Analizando archivos...")
+		// fmt.Println("Analizando archivos...")
 
 		nombreArchivo := getNombreArchivo(archivosActuales[i].Ruta);
 
 		// buscar archivo en la computadora
 		out, err := exec.Command("find", "/home", "-name", nombreArchivo).Output()
-		if err != nil { fmt.Printf("%s", err) }
+		if err != nil { 
+			// fmt.Printf("%s", err) 
+		}
 
 		output := string(out[:])
 
@@ -158,6 +165,77 @@ func verificarArchivosCopiados(){
 	}
 }
 
+func AnalizarArchivos(){
+	archivosActuales = obtenerArchivosUSB();
+
+	for {
+		// verificarCopiadosHaciaUSB();
+		verificarArchivosCopiados()
+		// limpiar consola
+		/*
+		cmd := exec.Command("clear")
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+		// MostrarMenu()
+		fmt.Println("Analizando archivos...")
+		*/
+		time.Sleep(2 * time.Second)
+		
+	}
+}
+
+func MostrarMenu(){
+	tienePermisos := false
+
+	// verificar si tiene permisos de usb
+	files, err := ioutil.ReadDir("/media/")
+    if err != nil {
+		fmt.Println(files, err)
+    } else {
+		tienePermisos = true
+		
+	}
+
+	mensajePermisos := ""
+	quitarConceder := "Quitar"
+	rutaBitacora := "/var/log/bitacoraUSB.txt"
+
+	if (tienePermisos){
+		mensajePermisos = "Los puertos USB están DESBLOQUEADOS"
+		quitarConceder = "Bloquear"
+	} else {
+		mensajePermisos = "Los puertos USB están BLOQUEADOS"
+		quitarConceder = "Desbloquear"
+	}
+
+	menu:= "---- William Alejandro Borrayo Alarcón - 201909103 ----\n"+
+	mensajePermisos+"\n"+
+	"Path de bitácora: " + rutaBitacora + "\n\n"+
+	"Seleccione una opción:\n"+
+	"1. "+quitarConceder+" puertos USB \n"+
+	"2. Mostrar ruta de bitácora \n"+
+	"3. Salir\n"
+
+
+	for{
+		go AnalizarArchivos()
+		fmt.Print(menu)
+
+		var eleccion int //Declarar variable y tipo antes de escanear, esto es obligatorio
+		fmt.Scanln(&eleccion)
+
+		switch eleccion {
+		case 1:
+			fmt.Println("Prefieres pizza")
+		case 2:
+			fmt.Println("Prefieres tacos")
+		default:
+			fmt.Println("No prefieres ninguno de ellos")
+			return
+		}
+	}
+}
+
 // sudo chmod 777 /media/
 func main() {
 	/*
@@ -173,19 +251,9 @@ func main() {
 	fmt.Println(output)
 	*/
 
-	archivosActuales = obtenerArchivosUSB();
+		
+		MostrarMenu()
 
-	for {
-		// verificarCopiadosHaciaUSB();
-		verificarArchivosCopiados()
-		// limpiar consola
-		cmd := exec.Command("clear")
-		cmd.Stdout = os.Stdout
-		cmd.Run()
-		fmt.Println("Analizando archivos...")
-		
-		time.Sleep(2 * time.Second)
-		
-	}
+	
 
 }

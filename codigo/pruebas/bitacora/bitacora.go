@@ -21,11 +21,12 @@ func EscribirJSON(arregloLogs []Log) {
  
 	file, _ := json.MarshalIndent(data, "", " ")
  
-	_ = ioutil.WriteFile("test.json", file, 0644)
+	_ = ioutil.WriteFile("bitacora.json", file, 0644)
+    _ = ioutil.WriteFile("/var/log/bitacoraUSB.txt", file, 0644)
 }
 
 func LeerJSON() Logs{
-	file, _ := ioutil.ReadFile("test.json")
+	file, _ := ioutil.ReadFile("bitacora.json")
  
 	data := Logs{}
  
