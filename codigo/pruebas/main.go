@@ -17,7 +17,7 @@ type Archivo struct {
 
 var archivosActuales []Archivo
 
-func compararTiempo(archivo1 string, archivo2 string) bool {
+func compararTiempo(archivo1 string, archivo2 string) (bool, string) {
 	out, err := exec.Command("stat", archivo1, archivo2).Output()
 	if err != nil { fmt.Printf("%s", err) }
 
@@ -40,9 +40,16 @@ func compararTiempo(archivo1 string, archivo2 string) bool {
 		fmt.Println(error1)
 	}
 
+	var devolver string
 	res:= time1.Before(time2)
+	if(res){
+		devolver = time2.Format("2006-01-02 15:04:05")
+		// time.Now().Format("2006-01-02 15:04:05")
+	}else{
+		devolver = time1.Format("2006-01-02 15:04:05")
+	}
 
-	return res
+	return res, devolver
 }
 
 func obtenerArchivosUSB() []Archivo{
@@ -126,15 +133,15 @@ func verificarArchivosCopiados(){
 				// verificar si son iguales
 				if(comprararArchivos(archivosActuales[i].Ruta, archivosEnCompu[j])){
 					fmt.Println("agregar a bitacora")
-					
-					if(compararTiempo(archivosActuales[i].Ruta, archivosEnCompu[j])){
+					menor, tiempo := compararTiempo(archivosActuales[i].Ruta, archivosEnCompu[j])
+					if(menor){
 						// desde usb
 						fmt.Println("caso1")
 						log := bitacora.Log{
 							Tipo: "Desde USB",
 							Origen: archivosActuales[i].Ruta,
 							Destino: archivosEnCompu[j],
-							FechaHora: time.Now().Format("2006-01-02 15:04:05")}
+							FechaHora: tiempo}
 						bitacora.AgregarBitacora(log)
 					} else {
 						// hacia usb
@@ -143,7 +150,7 @@ func verificarArchivosCopiados(){
 							Tipo: "Hacia USB",
 							Origen: archivosEnCompu[j],
 							Destino: archivosActuales[i].Ruta,
-							FechaHora: time.Now().Format("2006-01-02 15:04:05")}
+							FechaHora: tiempo}
 						bitacora.AgregarBitacora(log)
 					}
 				}
